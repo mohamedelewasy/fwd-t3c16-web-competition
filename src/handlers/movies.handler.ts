@@ -27,14 +27,13 @@ export const getMovie = async (req: Req, res: Res, next: Next) => {
 // method   :POST
 // route    :/movies/
 export const createMovie = async (req: Req, res: Res, next: Next) => {
-  res.send(req.body);
-  // const { name, release } = req.body;
-  // try {
-  //   const movie = await Movies.create({ name, release });
-  //   res.status(200).json({ data: movie });
-  // } catch (error) {
-  //   res.status(400).json({ msg: `failed to create movie` });
-  // }
+  const { name, release } = req.body;
+  try {
+    const movie = await Movies.create({ name, release });
+    res.status(200).json({ data: movie });
+  } catch (error) {
+    res.status(400).json({ msg: `failed to create movie` });
+  }
 };
 
 // method   :PUT

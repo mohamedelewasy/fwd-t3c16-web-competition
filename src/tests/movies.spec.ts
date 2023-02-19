@@ -4,7 +4,7 @@ import Client from "../config/db";
 describe("movies Model", () => {
   beforeAll(async function () {
     const connection = await Client.connect();
-    const sql = "DELETE FROM movies; ALTER SEQUENCE moviess_id_seq RESTART;"; // Make sure that movies table is fresh
+    const sql = "DELETE FROM movies; ALTER SEQUENCE movies_id_seq RESTART;"; // Make sure that movies table is fresh
     await connection.query(sql);
     connection.release();
   });
@@ -96,7 +96,7 @@ describe("movies endpoints", () => {
   beforeAll(async function () {
     const connection = await Client.connect();
     const sql =
-      "DELETE FROM moviess; ALTER SEQUENCE moviess_id_seq RESTART; DELETE FROM users;"; // Make sure that movies table is fresh
+      "DELETE FROM movies; ALTER SEQUENCE movies_id_seq RESTART; DELETE FROM users;"; // Make sure that movies table is fresh
     await connection.query(sql);
     connection.release();
   });
@@ -111,18 +111,18 @@ describe("movies endpoints", () => {
   it("index api should return a list of movies", async () => {
     const response = await request.get("/movies");
     expect(response.status).toBe(200);
-    expect(response.body).toEqual([
-      { id: 1, name: "The movie", release: new Date(2000, 1, 1) },
-    ]);
+    expect(response.body.data).toEqual(
+      [{ id: 1, name: "The movie", release:'2000-01-30T22:00:00.000Z' }]
+    );
   });
 
   it("show api should return the correct movie", async () => {
     const response = await request.get("/movies/1");
     expect(response.status).toBe(200);
-    expect(response.body).toEqual({
+    expect(response.body.data).toEqual({
       id: 1,
       name: "The movie",
-      release: new Date(2000, 1, 1),
+      release: '2000-01-30T22:00:00.000Z',
     });
   });
 
