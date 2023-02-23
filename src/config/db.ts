@@ -11,4 +11,4 @@ const client = new Pool({
   user: PG_USER,
   password: PG_PASSWORD,
 });
-export default client;
+export default await client.connect();
