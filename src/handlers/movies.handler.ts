@@ -11,7 +11,7 @@ export const getMovies: RequestHandler = asyncHandler(async (req, res, next) => 
 });
 
 // method   :GET
-// route    :/movies/?movieId
+// route    :/movies/:movieId
 export const getMovie: RequestHandler = asyncHandler(async (req, res, next) => {
   const movieId = req.params.movieId;
   const movie = await Movies.show(+movieId);
@@ -30,7 +30,7 @@ export const createMovie: RequestHandler = asyncHandler(async (req, res, next) =
 });
 
 // method   :PUT
-// route    :/movies/?movieId
+// route    :/movies/:movieId
 // access   :protected
 export const updateMovie: RequestHandler = asyncHandler(async (req, res, next) => {
   const movieId: number = +req.params.movieId;
@@ -84,6 +84,6 @@ export const updateFavouriteMovie: RequestHandler = asyncHandler(async (req, res
 // access   :protected
 export const deleteFavouriteMovie: RequestHandler = asyncHandler(async (req, res) => {
   const favouriteId: number = +req.params.favouriteId;
-  const favourite = await Movies.deleteMovieFromFavourite(favouriteId);
+  await Movies.deleteMovieFromFavourite(favouriteId);
   res.status(204).send();
 });
