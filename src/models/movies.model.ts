@@ -44,16 +44,20 @@ class Movies implements MovieModel {
   }
   async getFavouriteMovies(userId: number): Promise<FavouriteList[]> {
     const res = await this.db.query(
-      'SELECT favourite.id,movieId,watched,name,releasedAt FROM favourite INEER JOIN movies ON favourite.movieId=movies.id WHERE favourite.userId=$1;'
+      'SELECT favourite.id,movieId,watched,name,releasedAt FROM favourite INNER JOIN movies ON favourite.movieId=movies.id WHERE favourite.userId=$1;',
+      [userId]
     );
     return res.rows;
   }
   async updateMovieWatchState(favouriteId: number, watched: boolean): Promise<Favourite> {
-    const res = await this.db.query('UPDATE SET watched=$1 RETURNING *', [watched]);
+    const res = await this.db.query('UPDATE favourite SET watched=$1 WHERE id=$2 RETURNING *', [
+      watched,
+      favouriteId,
+    ]);
     return res.rows[0];
   }
   async deleteMovieFromFavourite(favouriteId: number): Promise<void> {
-    const res = await this.db.query('DELETE FROM movies WHERE id=$1', [favouriteId]);
+    const res = await this.db.query('DELETE FROM favourite WHERE id=$1', [favouriteId]);
     return;
   }
 }
