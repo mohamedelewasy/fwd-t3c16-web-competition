@@ -1,14 +1,16 @@
-import express from "express";
+import express from 'express';
+
 import {
   createMovie,
   deleteMovie,
   getMovie,
   getMovies,
   updateMovie,
-} from "../handlers/movies.handler";
+} from '../handlers/movies.handler';
+
 const router = express.Router();
 
-router.route("/").get(getMovies).post(createMovie);
-router.route("/:movieId").get(getMovie).put(updateMovie).delete(deleteMovie);
+router.route('/').get(getMovies).post(createMovie);
+router.route('/:movieId').get(getMovie).put(updateMovie).delete(deleteMovie);
 
 export default router;

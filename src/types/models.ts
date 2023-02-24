@@ -1,4 +1,4 @@
-import { Favourite, Movie, User } from "./schemas";
+import { Favourite, FavouriteList, Movie, User } from './schemas';
 
 export interface MovieModel {
   get(): Promise<Movie[]>;
@@ -6,12 +6,9 @@ export interface MovieModel {
   create(name: string, releasedAt: Date): Promise<Movie>;
   delete(movieId: number): Promise<void>;
   update(movieId: number, name: string, releasedAt: Date): Promise<Movie>;
-  getFavouriteMovies(userId: number): Promise<Favourite[]>;
+  getFavouriteMovies(userId: number): Promise<FavouriteList[]>;
   addMovieToFavourite(movieId: number, userId: number): Promise<Favourite>;
-  updateMovieWatchState(
-    favouriteId: number,
-    watched: boolean
-  ): Promise<Favourite>;
+  updateMovieWatchState(favouriteId: number, watched: boolean): Promise<Favourite>;
   deleteMovieFromFavourite(favouriteId: number): Promise<void>;
 }
 
