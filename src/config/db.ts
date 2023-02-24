@@ -12,4 +12,4 @@ const client = new Pool({
   password: PG_PASSWORD,
 });
 
-export default client.connect();
+export default client;

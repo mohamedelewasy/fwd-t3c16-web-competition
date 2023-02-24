@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start": "nodemon src/server.ts",
-    "jasmine": "set ENV=test &&jasmine",
+    "jasmine": "set ENV=test &&jasmine --config=jasmine.json",
     "test": "npm run demigrate-test && npm run migrate-test &&npm run build && set ENV=test&& npm run jasmine",
     "migrate": "db-migrate up",
     "demigrate": "db-migrate reset",
@@ -51,6 +51,7 @@
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",
     "express-validator": "^6.15.0",
+    "jasmine-ts": "^0.4.0",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.20",
     "npm": "^9.3.1",

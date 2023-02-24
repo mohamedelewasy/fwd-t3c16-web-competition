@@ -1,7 +1,7 @@
 import { ErrorRequestHandler } from 'express';
 
 const errorHandler: ErrorRequestHandler = (err: Error, req, res, next) => {
-  console.log(err.stack);
+  console.log(err.message);
   res.status(500).send('some thing went wrong');
 };
 
