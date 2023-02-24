@@ -1,53 +1,41 @@
-import db from "../config/db";
+import { PoolClient } from 'pg';
 
-export interface User {
-  id?: number;
-  email: string;
-  password: string;
-}
+import pool from '../config/db';
+import { UserModel } from '../types/models';
+import { User } from '../types/schemas';
 
-export default class usres {
-  static async show(userId: number): Promise<User> {
-    const conn = await db.connect();
-    const sql = "SELECT * FROM users WHERE id=$1";
-    const users = await conn.query(sql, [userId]);
-    conn.release();
-    return users.rows[0];
+class Users implements UserModel {
+  async show(user_id: number): Promise<User> {
+    const res = await pool.query('SELECT * FROM users WHERE id=$1', [user_id]);
+    return res.rows[0];
   }
-
-  static async index(): Promise<User[]> {
-    const conn = await db.connect();
-    const sql = "SELECT * FROM users";
-    const users = await conn.query(sql);
-    conn.release();
-    return users.rows;
-  }
-
-  static async create(payload: User): Promise<User> {
-    const conn = await db.connect();
-    const sql = "INSERT INTO users (name, release) VALUES ($1,$2) RETURNING *";
-    const users = await conn.query(sql, [payload.email, payload.password]);
-    conn.release();
-    return users.rows[0];
-  }
-
-  static async update(movieId: number, payload: User): Promise<User> {
-    const conn = await db.connect();
-    const sql = "UPDATE users SET name=$2,release=$3 WHERE id=$1 RETURNING *";
-    const users = await conn.query(sql, [
-      movieId,
-      payload.email,
-      payload.password,
+  async create(email: string, password: string): Promise<User> {
+    const res = await pool.query('INSERT INTO users (email,password) VALUES ($1,$2) RETURNING *', [
+      email,
+      password,
     ]);
-    conn.release();
-    return users.rows[0];
+    return res.rows[0];
   }
-
-  static async delete(userId: number): Promise<User> {
-    const conn = await db.connect();
-    const sql = "DELETE FROM users WHERE id=$1 RETURNING *";
-    const users = await conn.query(sql, [userId]);
-    conn.release();
-    return users.rows[0];
+  async updateEmail(user_id: number, email: string): Promise<User> {
+    const res = await pool.query('UPDATE users SET email=$1 WHERE id=$2 RETURNING *', [
+      email,
+      user_id,
+    ]);
+    return res.rows[0];
+  }
+  async updatePassword(user_id: number, password: string): Promise<User> {
+    const res = await pool.query('UPDATE users SET password=$1 WHERE id=$2 RETURNING *', [
+      password,
+      user_id,
+    ]);
+    return res.rows[0];
+  }
+  async getByEmail(email: string): Promise<User> {
+    const res = await pool.query('SELECT * FROM users WHERE email=$1;', [email]);
+    return res.rows[0];
   }
 }
+
+const obj = new Users();
+
+export default obj;

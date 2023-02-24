@@ -1,6 +1,6 @@
-CREATE TABLE favorite(
+CREATE TABLE favourite(
   id SERIAL PRIMARY KEY,
-  movies_id INTEGER REFERENCES movies(id),
-  users_id INTEGER REFERENCES users(id),
-  watched BOOLEAN
+  movie_id INTEGER REFERENCES movies(id) NOT NULL,
+  user_id INTEGER REFERENCES users(id) NOT NULL,
+  watched BOOLEAN NOT NULL DEFAULT false
 );

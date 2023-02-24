@@ -1,1 +1,1 @@
-DROP TABLE favorite;
+DROP TABLE favourite;
