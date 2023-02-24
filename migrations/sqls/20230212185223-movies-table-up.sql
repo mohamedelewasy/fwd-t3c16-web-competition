@@ -1,5 +1,5 @@
 CREATE TABLE movies(
   id SERIAL PRIMARY KEY,
   name VARCHAR(60) NOT NULL,
-  releasedAt DATE NOT NULL
+  released_at DATE NOT NULL
 );

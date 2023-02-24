@@ -1,3 +1,4 @@
+import pool from '../../config/db';
 import Users from '../../models/users.model';
 
 describe('user model', () => {
@@ -9,7 +10,7 @@ describe('user model', () => {
     const res = await Users.create('email2', 'password');
     expect(res).toEqual({ id: 2, email: 'email2', password: 'password' });
   });
-  it('get user by id', async () => {
+  it('get user by id=1', async () => {
     const res = await Users.show(1);
     expect(res).toEqual({ id: 1, email: 'email1', password: 'password' });
   });
@@ -27,5 +28,10 @@ describe('user model', () => {
   it('update password to newPassword', async () => {
     const res = await Users.updatePassword(1, 'newPassword');
     expect(res).toEqual({ id: 1, email: 'email@email.com', password: 'newPassword' });
+  });
+
+  afterAll(async () => {
+    const sql = 'DELETE FROM users; ALTER SEQUENCE users_id_seq RESTART WITH 1;';
+    await pool.query(sql);
   });
 });

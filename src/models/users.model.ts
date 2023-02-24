@@ -5,8 +5,8 @@ import { UserModel } from '../types/models';
 import { User } from '../types/schemas';
 
 class Users implements UserModel {
-  async show(userId: number): Promise<User> {
-    const res = await pool.query('SELECT * FROM users WHERE id=$1', [userId]);
+  async show(user_id: number): Promise<User> {
+    const res = await pool.query('SELECT * FROM users WHERE id=$1', [user_id]);
     return res.rows[0];
   }
   async create(email: string, password: string): Promise<User> {
@@ -16,17 +16,17 @@ class Users implements UserModel {
     ]);
     return res.rows[0];
   }
-  async updateEmail(userId: number, email: string): Promise<User> {
+  async updateEmail(user_id: number, email: string): Promise<User> {
     const res = await pool.query('UPDATE users SET email=$1 WHERE id=$2 RETURNING *', [
       email,
-      userId,
+      user_id,
     ]);
     return res.rows[0];
   }
-  async updatePassword(userId: number, password: string): Promise<User> {
+  async updatePassword(user_id: number, password: string): Promise<User> {
     const res = await pool.query('UPDATE users SET password=$1 WHERE id=$2 RETURNING *', [
       password,
-      userId,
+      user_id,
     ]);
     return res.rows[0];
   }

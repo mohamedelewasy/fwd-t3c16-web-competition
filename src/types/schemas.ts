@@ -1,7 +1,7 @@
 export interface Movie {
   id: number;
   name: string;
-  releasedAt: Date;
+  released_at: Date;
 }
 
 export interface User {
@@ -12,19 +12,19 @@ export interface User {
 
 export interface Favourite {
   id: number;
-  movieId: number;
-  userId: number;
+  movie_id: number;
+  user_id: number;
   watched: boolean;
 }
 
 export interface FavouriteList {
   id: number;
-  movieId: number;
+  movie_id: number;
   watched: boolean;
   name: string;
-  releasedAt: boolean;
+  released_at: boolean;
 }
 
 export interface JWT {
-  userId: number;
+  user_id: number;
 }
