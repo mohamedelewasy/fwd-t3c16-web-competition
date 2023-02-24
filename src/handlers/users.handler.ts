@@ -1,64 +1,62 @@
-import { Request as Req, Response as Res, NextFunction as Next } from "express";
-import Users, { User } from "../models/users.model";
+import bcrypt from 'bcrypt';
+import { RequestHandler } from 'express';
+import asyncHandler from 'express-async-handler';
 
-// method   :GET
-// route    :/users/
-export const getUsers = async (req: Req, res: Res, next: Next) => {
-  try {
-    const users = await Users.index();
-    res.status(200).json({ data: users });
-  } catch (error) {
-    res.status(400).json({ msg: "failed to connect to database" });
-  }
-};
-
-// method   :GET
-// route    :/users/?userId
-export const getUser = async (req: Req, res: Res, next: Next) => {
-  const { userId } = req.params;
-  try {
-    const user = await Users.show(+userId);
-    res.status(200).json({ data: user });
-  } catch (error) {
-    res.status(400).json({ msg: `user not found for this id=${userId}` });
-  }
-};
+import Users from '../models/users.model';
+import { compare, hash } from '../utils/hashPassword';
+import { generateToken } from '../utils/token';
 
 // method   :POST
-// route    :/users/
-export const createuser = async (req: Req, res: Res, next: Next) => {
-  const { email, password } = req.body;
-  try {
-    const user = await Users.create({ email, password });
-    res.status(200).json({ data: user });
-  } catch (error) {
-    res.status(400).json({ msg: `failed to create user` });
+// route    :/auth/signup
+export const createUser: RequestHandler = asyncHandler(async (req, res, next) => {
+  const email: string = req.body.email;
+  const password: string = req.body.password;
+  const hashedPassword = hash(password);
+  const user = await Users.create(email, hashedPassword);
+  res.status(200).json({ data: { id: user.id, email: user.email } });
+});
+
+// method   :POST
+// route    :/auth/login
+export const authenticate: RequestHandler = asyncHandler(async (req, res) => {
+  const email: string = req.body.email;
+  const password: string = req.body.password;
+  const user = await Users.getByEmail(email);
+  if (!user || !compare(password, user.password)) {
+    res.status(400).json({ msg: 'incorrect email or password' });
+    return;
   }
-};
+  const token = generateToken(user.id);
+  res.status(200).json({ token });
+});
 
 // method   :PUT
-// route    :/users/?userId
-export const updateuser = async (req: Req, res: Res, next: Next) => {
-  const { userId } = req.params;
-  const { email, password } = req.body;
-  try {
-    const user = await Users.update(+userId, { email, password });
-    if (!user) res.status(400).json({ msg: `user not found for id=${userId}` });
-    else res.status(200).json({ data: user });
-  } catch (error) {
-    res.status(400).json({ msg: `user not found for id=${userId}` });
-  }
-};
+// route    :/auth/update/email
+// acess    :protected
+export const updateEmail: RequestHandler = asyncHandler(async (req, res) => {
+  const email: string = req.body.email;
+  const userId: number = res.locals.userId;
+  const user = await Users.updateEmail(userId, email);
+  res.status(200).json({ data: { email: user.email } });
+});
 
-// method   :DELETE
-// route    :/users/?userId
-export const deleteuser = async (req: Req, res: Res, next: Next) => {
-  const { userId } = req.params;
-  try {
-    const user = await Users.delete(+userId);
-    if (!user) res.status(400).json({ msg: `user not found for id=${userId}` });
-    else res.status(200).json({ data: user });
-  } catch (error) {
-    res.status(400).json({ msg: `user not found for this id=${userId}` });
-  }
-};
+// method   :PUT
+// route    :/auth/update/password
+// acess    :protected
+export const updatePassword: RequestHandler = asyncHandler(async (req, res) => {
+  const password: string = req.body.password;
+  const userId: number = res.locals.userId;
+  const hashedPassword = hash(password);
+  await Users.updatePassword(userId, hashedPassword);
+  const token = generateToken(userId);
+  res.status(200).json({ token });
+});
+
+// method   :GET
+// route    :/auth/logout
+// acess    :protected
+export const logout: RequestHandler = asyncHandler(async (req, res) => {
+  delete res.locals.userId;
+  delete req.headers.authorization;
+  res.status(200).send();
+});

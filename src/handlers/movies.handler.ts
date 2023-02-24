@@ -21,6 +21,7 @@ export const getMovie: RequestHandler = asyncHandler(async (req, res, next) => {
 
 // method   :POST
 // route    :/movies/
+// access   :protected
 export const createMovie: RequestHandler = asyncHandler(async (req, res, next) => {
   const name: string = req.body.name;
   const releasedAt: Date = req.body.releasedAt;
@@ -30,6 +31,7 @@ export const createMovie: RequestHandler = asyncHandler(async (req, res, next) =
 
 // method   :PUT
 // route    :/movies/?movieId
+// access   :protected
 export const updateMovie: RequestHandler = asyncHandler(async (req, res, next) => {
   const movieId: number = +req.params.movieId;
   const name: string = req.body.name;
@@ -41,6 +43,7 @@ export const updateMovie: RequestHandler = asyncHandler(async (req, res, next) =
 
 // method   :DELETE
 // route    :/movies/?movieId
+// access   :protected
 export const deleteMovie: RequestHandler = asyncHandler(async (req, res, next) => {
   const movieId: number = +req.params.movieId;
   await Movies.delete(movieId);

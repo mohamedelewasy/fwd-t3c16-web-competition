@@ -14,6 +14,7 @@ export interface MovieModel {
 
 export interface UserModel {
   show(userId: number): Promise<User>;
+  getByEmail(email: string): Promise<User>;
   create(email: string, password: string): Promise<User>;
   updateEmail(userId: number, email: string): Promise<User>;
   updatePassword(userId: number, password: string): Promise<User>;

@@ -24,3 +24,7 @@ export interface FavouriteList {
   name: string;
   releasedAt: boolean;
 }
+
+export interface JWT {
+  userId: number;
+}

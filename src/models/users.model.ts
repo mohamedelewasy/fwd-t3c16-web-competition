@@ -15,16 +15,23 @@ class Users implements UserModel {
   }
   async create(email: string, password: string): Promise<User> {
     const res = await this.db.query(
-      'INSERT INTO users (email,password) VALUES ($1,$2) RETURNING *'
+      'INSERT INTO users (email,password) VALUES ($1,$2) RETURNING *',
+      [email, password]
     );
     return res.rows[0];
   }
   async updateEmail(userId: number, email: string): Promise<User> {
-    const res = await this.db.query('UPDATE users SET email=$1 WHERE id=$2', [email, userId]);
+    const res = await this.db.query('UPDATE users SET email=$1 WHERE id=$2 RETURNING *', [
+      email,
+      userId,
+    ]);
     return res.rows[0];
   }
   async updatePassword(userId: number, password: string): Promise<User> {
-    const res = await this.db.query('UPDATE users SET password=$1 WHERE id=$2 RETURNING *');
+    const res = await this.db.query('UPDATE users SET password=$1 WHERE id=$2 RETURNING *', [
+      password,
+      userId,
+    ]);
     return res.rows[0];
   }
   async getByEmail(email: string): Promise<User> {
