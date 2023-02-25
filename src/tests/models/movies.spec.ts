@@ -4,7 +4,6 @@ import Movies from '../../models/movies.model';
 describe('movies model', () => {
   it('create a valid movie with id = 1', async () => {
     const res = await Movies.create('movie1', new Date(Date.now()));
-    console.log(res);
     expect(res).toEqual(jasmine.objectContaining({ id: 1, name: 'movie1' }));
     expect(res.released_at).toBeDefined();
   });

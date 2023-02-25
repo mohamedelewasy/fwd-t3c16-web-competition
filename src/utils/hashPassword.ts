@@ -6,6 +6,7 @@ export const hash = (password: string): string => {
   const SALT = process.env.SALT;
   const PAPER = process.env.PAPER;
   if (!SALT || !PAPER) {
+    // eslint-disable-next-line no-console
     console.log('(salt or paper) is missing');
     process.exit(1);
   }
@@ -16,6 +17,7 @@ export const hash = (password: string): string => {
 export const compare = (password: string, hashedPassword: string): boolean => {
   const PAPER = process.env.PAPER;
   if (!PAPER) {
+    // eslint-disable-next-line no-console
     console.log('paper is missing');
     process.exit(1);
   }

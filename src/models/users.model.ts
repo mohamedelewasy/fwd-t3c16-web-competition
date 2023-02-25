@@ -1,5 +1,3 @@
-import { PoolClient } from 'pg';
-
 import pool from '../config/db';
 import { UserModel } from '../types/models';
 import { User } from '../types/schemas';

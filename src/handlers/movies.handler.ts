@@ -5,14 +5,14 @@ import Movies from '../models/movies.model';
 
 // method   :GET
 // route    :/movies/
-export const getMovies: RequestHandler = asyncHandler(async (req, res, next) => {
+export const getMovies: RequestHandler = asyncHandler(async (req, res) => {
   const movies = await Movies.get();
   res.status(200).json({ length: movies.length, data: movies });
 });
 
 // method   :GET
 // route    :/movies/:movieId
-export const getMovie: RequestHandler = asyncHandler(async (req, res, next) => {
+export const getMovie: RequestHandler = asyncHandler(async (req, res) => {
   const movieId = req.params.movieId;
   const movie = await Movies.show(+movieId);
   if (!movie) res.status(404).json({ msg: `movie not found for this id : ${movieId}` });
@@ -22,7 +22,7 @@ export const getMovie: RequestHandler = asyncHandler(async (req, res, next) => {
 // method   :POST
 // route    :/movies/
 // access   :protected
-export const createMovie: RequestHandler = asyncHandler(async (req, res, next) => {
+export const createMovie: RequestHandler = asyncHandler(async (req, res) => {
   const name: string = req.body.name;
   const releasedAt: Date = req.body.releasedAt;
   const movie = await Movies.create(name, releasedAt);
@@ -32,7 +32,7 @@ export const createMovie: RequestHandler = asyncHandler(async (req, res, next) =
 // method   :PUT
 // route    :/movies/:movieId
 // access   :protected
-export const updateMovie: RequestHandler = asyncHandler(async (req, res, next) => {
+export const updateMovie: RequestHandler = asyncHandler(async (req, res) => {
   const movieId: number = +req.params.movieId;
   const name: string = req.body.name;
   const releasedAt: Date = req.body.releasedAt;
@@ -44,7 +44,7 @@ export const updateMovie: RequestHandler = asyncHandler(async (req, res, next) =
 // method   :DELETE
 // route    :/movies/?movieId
 // access   :protected
-export const deleteMovie: RequestHandler = asyncHandler(async (req, res, next) => {
+export const deleteMovie: RequestHandler = asyncHandler(async (req, res) => {
   const movieId: number = +req.params.movieId;
   const movie = await Movies.show(movieId);
   if (!movie) {

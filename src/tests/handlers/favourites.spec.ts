@@ -2,8 +2,6 @@ import supertest from 'supertest';
 
 import app from '../../app';
 import pool from '../../config/db';
-import Movies from '../../models/movies.model';
-import Users from '../../models/users.model';
 
 const request = supertest(app);
 describe('favourite endpoints', () => {

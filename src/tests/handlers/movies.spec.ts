@@ -22,7 +22,6 @@ describe('movies endpoints', () => {
         .post('/movies')
         .send({ name: 'movie1', releasedAt: '2000-08-01' })
         .set('Authorization', `Bearer ${token}`);
-      console.log(res.body);
       expect(res.statusCode).toBe(201);
       expect(res.body.data).toEqual(jasmine.objectContaining({ name: 'movie1' }));
       expect(res.body.data.released_at).toBeDefined();

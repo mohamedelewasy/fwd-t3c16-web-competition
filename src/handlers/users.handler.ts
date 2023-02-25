@@ -1,4 +1,3 @@
-import bcrypt from 'bcrypt';
 import { RequestHandler } from 'express';
 import asyncHandler from 'express-async-handler';
 
@@ -8,7 +7,7 @@ import { generateToken } from '../utils/token';
 
 // method   :POST
 // route    :/auth/signup
-export const createUser: RequestHandler = asyncHandler(async (req, res, next) => {
+export const createUser: RequestHandler = asyncHandler(async (req, res) => {
   const email: string = req.body.email;
   const password: string = req.body.password;
   const hashedPassword = hash(password);
