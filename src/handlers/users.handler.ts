@@ -36,7 +36,6 @@ export const authenticate: RequestHandler = asyncHandler(async (req, res) => {
 export const updateEmail: RequestHandler = asyncHandler(async (req, res) => {
   const email: string = req.body.email;
   const userId: string = res.locals.userId;
-  console.log('handler user id : ', userId);
   const user = await Users.updateEmail(+userId, email);
   res.status(200).json({ data: { email: user.email } });
 });

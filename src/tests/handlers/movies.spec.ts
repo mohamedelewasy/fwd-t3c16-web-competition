@@ -5,7 +5,7 @@ import pool from '../../config/db';
 
 const request = supertest(app);
 
-fdescribe('movies endpoints', () => {
+describe('movies endpoints', () => {
   let token: string;
   beforeAll(async () => {
     await request
@@ -104,7 +104,6 @@ fdescribe('movies endpoints', () => {
       expect(res2.statusCode).toBe(404);
     });
 
-    // TODO :handle this test case
     it('delete an invalid movie with id=1', async () => {
       const res = await request.delete('/movies/1').set('Authorization', `Bearer ${token}`);
       expect(res.statusCode).toBe(404);
@@ -116,5 +115,14 @@ fdescribe('movies endpoints', () => {
       expect(res.statusCode).toBe(401);
       expect(res.body).toEqual({ msg: 'please login first' });
     });
+  });
+  afterAll(async () => {
+    const conn = await pool.connect();
+    const sql =
+      'DELETE FROM favourite; ALTER SEQUENCE favourite_id_seq RESTART WITH 1;' +
+      'DELETE FROM movies; ALTER SEQUENCE movies_id_seq RESTART WITH 1;' +
+      'DELETE FROM users; ALTER SEQUENCE users_id_seq RESTART WITH 1;';
+    await conn.query(sql);
+    conn.release();
   });
 });

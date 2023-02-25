@@ -61,6 +61,11 @@ export const deleteMovie: RequestHandler = asyncHandler(async (req, res, next) =
 export const addMovieToFavourite: RequestHandler = asyncHandler(async (req, res) => {
   const userId: number = +res.locals.userId;
   const movieId: number = +req.params.movieId;
+  const movie = await Movies.getMovieFromFavourite(userId, movieId);
+  if (movie) {
+    res.status(400).json({ msg: 'movie is already in favourite' });
+    return;
+  }
   const favourite = await Movies.addMovieToFavourite(movieId, userId);
   res.status(200).json({ data: favourite });
 });
@@ -81,6 +86,12 @@ export const updateFavouriteMovie: RequestHandler = asyncHandler(async (req, res
   const favouriteId: number = +req.params.favouriteId;
   const watched: boolean = req.body.watched;
   const favourite = await Movies.updateMovieWatchState(favouriteId, watched);
+  if (!favourite) {
+    res
+      .status(404)
+      .json({ msg: `movie not found in favourite list with this favourite id : ${favouriteId}` });
+    return;
+  }
   res.status(200).json({ data: favourite });
 });
 
@@ -89,6 +100,14 @@ export const updateFavouriteMovie: RequestHandler = asyncHandler(async (req, res
 // access   :protected
 export const deleteFavouriteMovie: RequestHandler = asyncHandler(async (req, res) => {
   const favouriteId: number = +req.params.favouriteId;
+  const userId: number = +res.locals.userId;
+  const movie = await Movies.getMovieFromFavouriteByFavouriteId(userId, favouriteId);
+  if (!movie) {
+    res
+      .status(404)
+      .json({ msg: `movie not found in favourite list with favourite id : ${favouriteId}` });
+    return;
+  }
   await Movies.deleteMovieFromFavourite(favouriteId);
   res.status(204).send();
 });

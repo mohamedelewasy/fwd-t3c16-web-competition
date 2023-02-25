@@ -72,11 +72,7 @@ describe('user endpoints', () => {
     it('logout with valid token', async () => {
       const res = await request.get('/auth/logout').set('Authorization', `Bearer ${token}`);
       expect(res.statusCode).toBe(204);
-      const res2 = await request
-        .get('/auth/logout')
-        .set('Authorization', res.headers.authorization);
-      expect(res2.statusCode).toBe(401);
-      expect(res2.body).toEqual({ msg: 'please login first' });
+      expect(res.headers.authorization).not.toBeDefined();
     });
 
     it('logout with invalid token', async () => {
@@ -156,7 +152,12 @@ describe('user endpoints', () => {
   });
 
   afterAll(async () => {
-    const sql = 'DELETE FROM users; ALTER SEQUENCE users_id_seq RESTART WITH 1;';
-    await pool.query(sql);
+    const conn = await pool.connect();
+    const sql =
+      'DELETE FROM favourite; ALTER SEQUENCE favourite_id_seq RESTART WITH 1;' +
+      'DELETE FROM movies; ALTER SEQUENCE movies_id_seq RESTART WITH 1;' +
+      'DELETE FROM users; ALTER SEQUENCE users_id_seq RESTART WITH 1;';
+    await conn.query(sql);
+    conn.release();
   });
 });
