@@ -54,8 +54,15 @@ const updatePassword = [
     .withMessage('password must be at least 4 characters')
     .isLength({ max: 32 })
     .withMessage('password must be maximum 32 characters'),
+  body('newPassword')
+    .notEmpty()
+    .withMessage('password is required')
+    .isLength({ min: 4 })
+    .withMessage('password must be at least 4 characters')
+    .isLength({ max: 32 })
+    .withMessage('password must be maximum 32 characters'),
   body('passwordConfirm').custom((val, { req }) => {
-    if (req.body.password === val) return Promise.resolve();
+    if (req.body.newPassword === val) return Promise.resolve();
     return Promise.reject('invalid confirmation password');
   }),
   validator,

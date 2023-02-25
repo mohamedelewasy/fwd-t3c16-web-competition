@@ -26,5 +26,5 @@ export interface FavouriteList {
 }
 
 export interface JWT {
-  user_id: number;
+  userId: number;
 }
