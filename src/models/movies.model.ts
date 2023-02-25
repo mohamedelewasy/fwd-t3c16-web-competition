@@ -52,6 +52,23 @@ class Movies implements MovieModel {
     ]);
     return res.rows[0];
   }
+  async getMovieFromFavourite(userId: number, movieId: number): Promise<Favourite> {
+    const res = await pool.query('SELECT * FROM favourite WHERE user_id=$1 AND movie_id=$2', [
+      userId,
+      movieId,
+    ]);
+    return res.rows[0];
+  }
+  async getMovieFromFavouriteByFavouriteId(
+    userId: number,
+    favouriteId: number
+  ): Promise<Favourite> {
+    const res = await pool.query('SELECT * FROM favourite WHERE user_id=$1 AND id=$2', [
+      userId,
+      favouriteId,
+    ]);
+    return res.rows[0];
+  }
   async deleteMovieFromFavourite(favouriteId: number): Promise<void> {
     const res = await pool.query('DELETE FROM favourite WHERE id=$1', [favouriteId]);
     return;

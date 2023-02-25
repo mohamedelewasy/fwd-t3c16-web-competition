@@ -31,7 +31,12 @@ describe('user model', () => {
   });
 
   afterAll(async () => {
-    const sql = 'DELETE FROM users; ALTER SEQUENCE users_id_seq RESTART WITH 1;';
-    await pool.query(sql);
+    const conn = await pool.connect();
+    const sql =
+      'DELETE FROM favourite; ALTER SEQUENCE favourite_id_seq RESTART WITH 1;' +
+      'DELETE FROM movies; ALTER SEQUENCE movies_id_seq RESTART WITH 1;' +
+      'DELETE FROM users; ALTER SEQUENCE users_id_seq RESTART WITH 1;';
+    await conn.query(sql);
+    conn.release();
   });
 });

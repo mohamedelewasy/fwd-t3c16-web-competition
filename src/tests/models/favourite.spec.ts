@@ -36,6 +36,11 @@ describe('favourite model', () => {
     );
   });
 
+  it('get favourite movie by favourite id=1 for user id = 1', async () => {
+    const res = await Movies.getMovieFromFavouriteByFavouriteId(1, 1);
+    expect(res).toEqual({ id: 1, movie_id: 1, user_id: 1, watched: false });
+  });
+
   it('update favourite movie id = 1 for user id = 1 to watched=true', async () => {
     const res = await Movies.updateMovieWatchState(1, true);
     expect(res).toEqual({ id: 1, movie_id: 1, user_id: 1, watched: true });
@@ -62,10 +67,12 @@ describe('favourite model', () => {
   });
 
   afterAll(async () => {
+    const conn = await pool.connect();
     const sql =
       'DELETE FROM favourite; ALTER SEQUENCE favourite_id_seq RESTART WITH 1;' +
       'DELETE FROM movies; ALTER SEQUENCE movies_id_seq RESTART WITH 1;' +
       'DELETE FROM users; ALTER SEQUENCE users_id_seq RESTART WITH 1;';
-    await pool.query(sql);
+    await conn.query(sql);
+    conn.release();
   });
 });

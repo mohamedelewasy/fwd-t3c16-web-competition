@@ -6,6 +6,8 @@ export interface MovieModel {
   create(name: string, releasedAt: Date): Promise<Movie>;
   delete(movieId: number): Promise<void>;
   update(movieId: number, name: string, releasedAt: Date): Promise<Movie>;
+  getMovieFromFavourite(userId: number, movieId: number): Promise<Favourite>;
+  getMovieFromFavouriteByFavouriteId(userId: number, favouriteId: number): Promise<Favourite>;
   getFavouriteMovies(userId: number): Promise<FavouriteList[]>;
   addMovieToFavourite(movieId: number, userId: number): Promise<Favourite>;
   updateMovieWatchState(favouriteId: number, watched: boolean): Promise<Favourite>;

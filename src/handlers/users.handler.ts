@@ -13,7 +13,7 @@ export const createUser: RequestHandler = asyncHandler(async (req, res, next) =>
   const password: string = req.body.password;
   const hashedPassword = hash(password);
   const user = await Users.create(email, hashedPassword);
-  res.status(200).json({ data: { id: user.id, email: user.email } });
+  res.status(201).json({ data: { id: user.id, email: user.email } });
 });
 
 // method   :POST
@@ -35,8 +35,8 @@ export const authenticate: RequestHandler = asyncHandler(async (req, res) => {
 // acess    :protected
 export const updateEmail: RequestHandler = asyncHandler(async (req, res) => {
   const email: string = req.body.email;
-  const userId: number = res.locals.userId;
-  const user = await Users.updateEmail(userId, email);
+  const userId: string = res.locals.userId;
+  const user = await Users.updateEmail(+userId, email);
   res.status(200).json({ data: { email: user.email } });
 });
 
@@ -45,8 +45,14 @@ export const updateEmail: RequestHandler = asyncHandler(async (req, res) => {
 // acess    :protected
 export const updatePassword: RequestHandler = asyncHandler(async (req, res) => {
   const password: string = req.body.password;
+  const newPassword: string = req.body.newPassword;
   const userId: number = res.locals.userId;
-  const hashedPassword = hash(password);
+  const user = await Users.show(userId);
+  if (!compare(password, user.password)) {
+    res.status(400).json({ msg: 'incorrect password' });
+    return;
+  }
+  const hashedPassword = hash(newPassword);
   await Users.updatePassword(userId, hashedPassword);
   const token = generateToken(userId);
   res.status(200).json({ token });
@@ -58,5 +64,5 @@ export const updatePassword: RequestHandler = asyncHandler(async (req, res) => {
 export const logout: RequestHandler = asyncHandler(async (req, res) => {
   delete res.locals.userId;
   delete req.headers.authorization;
-  res.status(200).send();
+  res.status(204).send();
 });

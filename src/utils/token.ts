@@ -21,9 +21,8 @@ export const verifyToken = (token: string) => {
   }
   try {
     const obj = jwt.verify(token, JWT_SECRET) as JWT;
-    return obj.user_id;
+    return obj.userId;
   } catch (error) {
-    console.log('errrrrrrrrrrrrrrrrrrrr');
     throw new Error('bad token');
   }
 };
