@@ -15,7 +15,7 @@
     "create-dev-db": "db-migrate --config database_create.json db:create project",
     "create-test-db": "db-migrate --config database_create.json db:create project_test",
     "lint": "eslint . --ext .ts",
-    "format": "prettier --config .prettierrc 'src/**/*.ts' --write"
+    "format": "prettier --config .prettierrc.json src/**/*.ts --write"
   },
   "author": "mohamed elewasy",
   "license": "ISC",

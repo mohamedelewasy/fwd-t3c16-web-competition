@@ -1,5 +1,3 @@
-import { PoolClient } from 'pg';
-
 import pool from '../config/db';
 import { MovieModel } from '../types/models';
 import { Favourite, FavouriteList, Movie } from '../types/schemas';
@@ -21,7 +19,7 @@ class Movies implements MovieModel {
     return res.rows[0];
   }
   async delete(movie_id: number): Promise<void> {
-    const res = await pool.query('DELETE FROM movies WHERE id=$1', [movie_id]);
+    await pool.query('DELETE FROM movies WHERE id=$1', [movie_id]);
     return;
   }
   async update(movie_id: number, name: string, released_at: Date): Promise<Movie> {
@@ -70,7 +68,7 @@ class Movies implements MovieModel {
     return res.rows[0];
   }
   async deleteMovieFromFavourite(favouriteId: number): Promise<void> {
-    const res = await pool.query('DELETE FROM favourite WHERE id=$1', [favouriteId]);
+    await pool.query('DELETE FROM favourite WHERE id=$1', [favouriteId]);
     return;
   }
 }

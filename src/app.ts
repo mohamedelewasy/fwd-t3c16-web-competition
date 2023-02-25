@@ -1,5 +1,6 @@
+/* eslint-disable no-console */
 import dotenv from 'dotenv';
-import express, { ErrorRequestHandler } from 'express';
+import express from 'express';
 
 import errorHandler from './middlewares/errorHandler';
 import appRoutes from './routes/index';

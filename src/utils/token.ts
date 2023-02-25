@@ -7,6 +7,7 @@ dotenv.config();
 export const generateToken = (userId: number) => {
   const JWT_SECRET = process.env.JWT_SECRET;
   if (!JWT_SECRET) {
+    // eslint-disable-next-line no-console
     console.log('jwt secret is missing');
     process.exit(1);
   }
@@ -16,6 +17,7 @@ export const generateToken = (userId: number) => {
 export const verifyToken = (token: string) => {
   const JWT_SECRET = process.env.JWT_SECRET;
   if (!JWT_SECRET) {
+    // eslint-disable-next-line no-console
     console.log('jwt secret is missing');
     process.exit(1);
   }
