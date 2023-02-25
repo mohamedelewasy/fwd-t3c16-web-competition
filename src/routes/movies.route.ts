@@ -16,17 +16,17 @@ import val from '../validator/movies.validator';
 
 const router = express.Router();
 
-router.route('/').get(getMovies).post(val.createMovie, createMovie);
+router.route('/').get(getMovies).post(protect, val.createMovie, createMovie);
 router.route('/favourite').get(protect, getFavouriteMovies);
 router
   .route('/favourite/:favouriteId')
-  .put(val.updateFavouriteMovie, updateFavouriteMovie)
-  .delete(val.deleteFavouriteMovie, deleteFavouriteMovie);
+  .put(protect, val.updateFavouriteMovie, updateFavouriteMovie)
+  .delete(protect, val.deleteFavouriteMovie, deleteFavouriteMovie);
 router
   .route('/:movieId')
   .get(val.getMovie, getMovie)
-  .put(val.updateMovie, updateMovie)
-  .delete(val.deleteMovie, deleteMovie);
+  .put(protect, val.updateMovie, updateMovie)
+  .delete(protect, val.deleteMovie, deleteMovie);
 router.route('/:movieId/favourite').post(protect, val.addMovieToFavourite, addMovieToFavourite);
 
 export default router;

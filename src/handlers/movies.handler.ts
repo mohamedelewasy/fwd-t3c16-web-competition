@@ -15,7 +15,7 @@ export const getMovies: RequestHandler = asyncHandler(async (req, res, next) => 
 export const getMovie: RequestHandler = asyncHandler(async (req, res, next) => {
   const movieId = req.params.movieId;
   const movie = await Movies.show(+movieId);
-  if (!movie) res.status(404).json({ msg: `movie not found for this id=${movieId}` });
+  if (!movie) res.status(404).json({ msg: `movie not found for this id : ${movieId}` });
   else res.status(200).json({ data: movie });
 });
 
@@ -26,7 +26,7 @@ export const createMovie: RequestHandler = asyncHandler(async (req, res, next) =
   const name: string = req.body.name;
   const releasedAt: Date = req.body.releasedAt;
   const movie = await Movies.create(name, releasedAt);
-  res.status(200).json({ data: movie });
+  res.status(201).json({ data: movie });
 });
 
 // method   :PUT
@@ -37,7 +37,7 @@ export const updateMovie: RequestHandler = asyncHandler(async (req, res, next) =
   const name: string = req.body.name;
   const releasedAt: Date = req.body.releasedAt;
   const movie = await Movies.update(movieId, name, releasedAt);
-  if (!movie) res.status(404).json({ msg: `movie not found for id=${movieId}` });
+  if (!movie) res.status(404).json({ msg: `movie not found for this id : ${movieId}` });
   else res.status(200).json({ data: movie });
 });
 
@@ -46,6 +46,11 @@ export const updateMovie: RequestHandler = asyncHandler(async (req, res, next) =
 // access   :protected
 export const deleteMovie: RequestHandler = asyncHandler(async (req, res, next) => {
   const movieId: number = +req.params.movieId;
+  const movie = await Movies.show(movieId);
+  if (!movie) {
+    res.status(404).json({ msg: `movie not found for this id : ${movieId}` });
+    return;
+  }
   await Movies.delete(movieId);
   res.status(204).send();
 });

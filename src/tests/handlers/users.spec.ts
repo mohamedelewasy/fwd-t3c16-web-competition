@@ -1,6 +1,7 @@
 import supertest from 'supertest';
 
 import app from '../../app';
+import pool from '../../config/db';
 
 const request = supertest(app);
 
@@ -152,5 +153,10 @@ describe('user endpoints', () => {
       expect(res.statusCode).toBe(400);
       expect(res.body).toEqual({ msg: 'incorrect password' });
     });
+  });
+
+  afterAll(async () => {
+    const sql = 'DELETE FROM users; ALTER SEQUENCE users_id_seq RESTART WITH 1;';
+    await pool.query(sql);
   });
 });
